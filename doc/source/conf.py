@@ -186,7 +186,7 @@ epub_exclude_files = ['search.html']
 intersphinx_mapping = {'https://docs.python.org/': None}
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../code/'))
+sys.path.insert(0, os.path.abspath('../../code'))
 
 import sphinx_rtd_theme
 html_theme = "sphinx_rtd_theme"
