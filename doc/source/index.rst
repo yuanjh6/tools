@@ -14,8 +14,8 @@ Introduction
    :maxdepth: 2
    :caption: Contents:
    
-   collect_links
-   valid_rtmp
+   code/collect_links
+   code/valid_rtmp
 
 Indices and tables
 ==================
