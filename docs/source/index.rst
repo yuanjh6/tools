@@ -12,8 +12,12 @@ Welcome to tools's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   valid_rtmp
    collect_links
+   pkl2csv
+   rtmp_player
+   valid_rtmp
+   vnote2hexo
+   vnote_md_format
 
 
 Indices and tables
