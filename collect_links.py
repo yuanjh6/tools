@@ -15,7 +15,7 @@
 
 3,[(2,http://xxx.yy.com/links),(2,https://zz.ff.cn/links)]=> [(3,http://xxx.yy.zz/links),(3,https://zz.ff.zz/links)]
 
-=> 循环此步骤1
+=> 循环此步骤
 
 """
 import argparse
