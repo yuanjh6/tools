@@ -3,7 +3,9 @@
 """
 寻找过滤有效的rtmp,or,rtsp直播地址
 
-python valid_rtmp.py -u https://blog.csdn.net/osle123/article/details/52757886
+帮助:python pkl2csv.py -h
+
+使用示例:python valid_rtmp.py -u https://blog.csdn.net/osle123/article/details/52757886
 
 步骤:
 

@@ -5,7 +5,9 @@
 
 涉及：树的广度遍历（队列），代理模式，多线程，生成者消费者，跨线程数据共享－队列（阻塞）
 
-脚本使用样例：python collect_links.py -s 'https://hexo.yuanjh.cn' -suf '/links'
+帮助:python collect_links.py -h
+
+使用示例:python collect_links.py -s 'https://hexo.yuanjh.cn' -suf '/links'
 
 程序执行步骤
 
