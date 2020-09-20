@@ -35,6 +35,38 @@ python vnote_md_format.py -f 目录
 python vnote_md_format.py -f ./目录1/目录2/文件.md(x)
 
 python vnote_md_format.py -f 文件.md
+
+
+特殊说明：
+
+01,文章的categories其实是文件路径切分，所以执行脚本前,vnoteMdFormat.py文件位置最好和md文件或者文件夹同级位置
+
+比如：脚本位置:/xxx/yyy/zzz/vnoteMdFormat.py
+
+你的md文件位置:/fff/mmm/kkk/vnote/生活/日记20200328.md
+
+此时如果你在路径:/xxx/yyy/zzz/下执行脚本,python vnoteMdFormat.py /fff/mmm/kkk/vnote/生活/日记20200328.md
+
+这样的话md文件的categories,是，fff,mmm,kkk,vnote,生活,但大多数情况，fff,mmm,可能是没用的，比如home/username/等无意义的
+
+所以建议，将vnoteMdFormat.py放到/fff/mmm/kkk/vnote/下面，在/fff/mmm/kkk/vnote/下执行:python vnoteMdFormat.py 生活/日记20200328.md
+
+如此的化，生成的文章的categories则为['生活'],基本符合本意
+
+如下命令是：
+
+1,vnoteMdFormat.py复制到md所在文件夹　/home/john/文档/vnote_notebooks/vnote/
+
+2,在md所在文件夹外执行python vnoteMdFormat.py $(ls -I _v_recycle_bin)
+
+3,删除第１步复制过来的vnoteMdFormat.py脚本文件
+
+建议使用前，单个步骤执行下，看下各个命令都什么效果，避免错了，还要在修改.md文件
+```
+cp vnoteMdFormat.py /home/john/文档/vnote_notebooks/vnote/ && cd /home/john/文档/vnote_notebooks/vnote/ && conda activate py35 && python vnoteMdFormat.py $(ls -I _v_recycle_bin) && rm vnoteMdFormat.py
+```
+02,阅读代码可以发现，对于文章标题(也即是文件名)如果含有[密]，则自动增加字段password: xxxxyyyy ,为了实现对文章添加密码，没有密码无法访问（需要hexo插件配合)
+
 """
 import argparse
 import io
@@ -43,23 +75,10 @@ import re
 import sys
 import time
 
-from tencentcloud.common import credential
-from tencentcloud.common.profile.client_profile import ClientProfile
-from tencentcloud.common.profile.http_profile import HttpProfile
-from tencentcloud.nlp.v20190408 import nlp_client, models
 import hashlib
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
-# 访问凭证去腾讯找，参考：https://console.cloud.tencent.com/nlp/basicguide
-cred = credential.Credential("xxx", "yyy")
-http_profile = HttpProfile()
-http_profile.endpoint = "nlp.tencentcloudapi.com"
-
-client_profile = ClientProfile()
-client_profile.httpProfile = http_profile
-client = nlp_client.NlpClient(cred, "ap-guangzhou", client_profile)
-req = models.KeywordsExtractionRequest()
 
 # 记录addr对应文章，用于输出冲突文章，手工处理
 abbr_map = dict()
@@ -104,6 +123,22 @@ def get_file_keywords(title: str):
     :param title: 文章标题
     :return: 文章关键词
     """
+    from tencentcloud.common import credential
+    from tencentcloud.common.profile.client_profile import ClientProfile
+    from tencentcloud.common.profile.http_profile import HttpProfile
+    from tencentcloud.nlp.v20190408 import nlp_client, models
+
+    # todo should't here,but outer can't use sphinx autodoc
+    # 访问凭证去腾讯找，参考：https://console.cloud.tencent.com/nlp/basicguide
+    cred = credential.Credential("xxx", "yyy")
+    http_profile = HttpProfile()
+    http_profile.endpoint = "nlp.tencentcloudapi.com"
+
+    client_profile = ClientProfile()
+    client_profile.httpProfile = http_profile
+    client = nlp_client.NlpClient(cred, "ap-guangzhou", client_profile)
+    req = models.KeywordsExtractionRequest()
+
     title = re.sub(r'\[.*?\]', r'', title).replace('_', ',')  # 去除[]中的东西
     title = re.sub(r'\d+', r'', title)
     params = '{"Num":10,"Text":"%s"}' % title
