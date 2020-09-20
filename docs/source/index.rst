@@ -18,6 +18,7 @@ Welcome to tools's documentation!
    valid_rtmp
    vnote2hexo
    vnote_md_format
+   cta_machine_Info/machine_Info
 
 
 Indices and tables
