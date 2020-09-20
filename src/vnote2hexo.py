@@ -12,6 +12,8 @@
 帮助:python vnote2hexo.py -h
 
 使用示例: python vnote2hexo.py -v /home/john/文档/vnote_notebooks/vnote -s /home/john/opt/hexo/source -f '\[博\].*\.md' -w '/home/john/opt/hexo/source/images_out/water.png'
+
+参考本博客博文：脚本_vnote同步到hexo步骤[博]（自行搜索）
 """
 import argparse
 import os
