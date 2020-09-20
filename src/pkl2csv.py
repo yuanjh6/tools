@@ -20,7 +20,6 @@
 import argparse
 import json
 import os
-import sys
 from contextlib import suppress
 from typing import Dict, Tuple
 
