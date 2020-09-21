@@ -6,8 +6,17 @@ import shutil
 from typing import Tuple, List
 
 """
+基于vnote的博客自动发布(sphinx)
 
-使用实例:python vnote2sphinx.py -v /home/john/文档/vnote_notebooks/vnote/技术/编程语言 -s /home/john/opt/sphinx/python_study -f python进阶
+简单来说包含2部分功能:
+
+1,将md和关联的img图片复制到sphinx路径
+
+2,将非标准md(hexo兼容格式)转为标准md格式
+
+帮助:python vnote2hexo.py -h
+
+使用示例:python vnote2sphinx.py -v /home/john/文档/vnote_notebooks/ -s /home/john/opt/sphinx/python_study/source -f python进阶
 
 """
 VNOTE_IMAGE_DIR = '_v_images'

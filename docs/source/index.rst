@@ -19,6 +19,7 @@ Welcome to tools's documentation!
    vnote2hexo
    vnote_md_format
    cta_machine_Info/machine_Info
+   vnote2sphinx
 
 
 Indices and tables
