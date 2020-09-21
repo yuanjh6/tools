@@ -9,4 +9,5 @@ src
    rtmp_player
    valid_rtmp
    vnote2hexo
+   vnote2sphinx
    vnote_md_format

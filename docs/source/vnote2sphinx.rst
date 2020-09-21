@@ -1,7 +1,7 @@
-rtmp\_player module
+vnote2sphinx module
 ===================
 
-.. automodule:: rtmp_player
+.. automodule:: vnote2sphinx
     :members:
     :undoc-members:
     :show-inheritance:
