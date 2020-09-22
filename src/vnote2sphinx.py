@@ -79,15 +79,16 @@ def copy_file_imgs(name: str, path: str, imgs: List[str], target_path: str) -> N
     shutil.copy(os.path.normpath("%s/%s" % (path, name)), os.path.normpath("%s/%s" % (target_path, name)))
     # 复制图片
     [shutil.copy(os.path.normpath("%s/%s" % (path, img)), os.path.normpath("%s/%s" % (target_path, img))) for img in
-     imgs]
+     imgs if os.path.exists(os.path.normpath("%s/%s" % (path, img)))]
 
 
-def format_to_md(name, path):
+def format_to_md(name, path) -> str:
     """
     md文件转为标准md格式
 
     :param name: 文件名
     :param path: 文件路径
+    :return: new file name
     """
     # 改名
     new_name = name.replace('[博]', '')
@@ -101,9 +102,10 @@ def format_to_md(name, path):
         file_index += 1
         if line.startswith('---'):
             break
-    file_content[file_index] = '# %s\n' % new_name.replace('.md','')
+    file_content[file_index] = '# %s\n' % new_name.replace('.md', '')
     with open(new_file, 'w+') as f:
         f.writelines(file_content[file_index:])
+    return new_name
 
 
 if __name__ == '__main__':
@@ -119,8 +121,13 @@ if __name__ == '__main__':
     filter_reg = args.filter_reg
 
     tmp = get_file_imgs(vnote_dir, filter_reg)
-    # os.makedirs('%s/%s' % (sphinx_source_dir, VNOTE_IMAGE_DIR))
+
+    # auto create img dir
+    img_dir = '%s/%s' % (sphinx_source_dir, VNOTE_IMAGE_DIR)
+    os.path.exists(img_dir) or os.makedirs(img_dir)
+
     # copy file and imgs
     [copy_file_imgs(name, path, imgs, sphinx_source_dir) for name, path, imgs in tmp]
     # format file
-    [format_to_md(name, sphinx_source_dir) for name, _, _ in tmp]
+    new_names=[format_to_md(name, sphinx_source_dir) for name, _, _ in tmp]
+    print('\n'.join(new_names))
