@@ -102,10 +102,11 @@ def format_to_md(name, path) -> str:
         file_index += 1
         if line.startswith('---'):
             break
-    file_content[file_index] = '# %s\n' % new_name.replace('.md', '')
+    file_title = new_name.replace('.md', '')
+    file_content[file_index] = '# %s\n' % file_title
     with open(new_file, 'w+') as f:
         f.writelines(file_content[file_index:])
-    return new_name
+    return file_title
 
 
 if __name__ == '__main__':
@@ -129,5 +130,5 @@ if __name__ == '__main__':
     # copy file and imgs
     [copy_file_imgs(name, path, imgs, sphinx_source_dir) for name, path, imgs in tmp]
     # format file
-    new_names=[format_to_md(name, sphinx_source_dir) for name, _, _ in tmp]
-    print('\n'.join(new_names))
+    file_titles = [format_to_md(name, sphinx_source_dir) for name, _, _ in tmp]
+    print('\n'.join(file_titles))
