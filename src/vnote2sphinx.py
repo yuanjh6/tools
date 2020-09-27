@@ -53,7 +53,7 @@ def get_file_imgs(vnote_dir: str, filter_reg: str) -> Tuple[str, str, List[str]]
         if dirpath.find('_v_recycle_bin') > -1:
             continue
         for name in filenames:
-            if name.endswith('md') and re.search(filter_reg, name, re.M | re.I):
+            if name.endswith('md') and name.find('[博]') >= 0 and re.search(filter_reg, name, re.M | re.I):
                 # 采集文中图片
                 img_names = get_imgs(os.path.normpath("%s/%s" % (dirpath, name)))
                 ret_tuple_list.append((name, dirpath,
