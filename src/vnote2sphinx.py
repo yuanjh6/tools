@@ -104,8 +104,21 @@ def format_to_md(name, path) -> str:
             break
     file_title = new_name.replace('.md', '')
     file_content[file_index] = '# %s\n' % file_title
+
+    # 将```标记外的文档的结尾空格替换为换行
+    tmp_count = 0
+    new_file_content = list()
+    for i in range(file_index, len(file_content)):
+        if file_content[i].startswith('```\n'):
+            tmp_count += 1
+        elif tmp_count % 2 == 0 and file_content[i].endswith('  \n'):
+            new_file_content.append(file_content[i].rstrip() + '\n')
+            new_file_content.append('\n')
+            continue
+        new_file_content.append(file_content[i])
+
     with open(new_file, 'w+') as f:
-        f.writelines(file_content[file_index:])
+        f.writelines(new_file_content)
     return file_title
 
 
