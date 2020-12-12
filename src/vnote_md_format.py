@@ -1,5 +1,5 @@
 # coding=utf-8
-# 基于conda env:py35
+# 基于conda env:tools
 """
 工具:将vnote的md格式转为hexo的md格式
 
@@ -74,7 +74,7 @@ import os
 import re
 import sys
 import time
-
+from pprint import pprint
 from tencentcloud.common import credential
 from tencentcloud.common.profile.client_profile import ClientProfile
 from tencentcloud.common.profile.http_profile import HttpProfile
@@ -184,7 +184,7 @@ class MdArticle(object):
         self.keywords = ''
         self.abbrlink = ''
         self.data = []
-        self.modifyed = false
+        self.modifyed = False
         if self.full_file_path.strip():
             # 操作文件
             with open(self.full_file_path, 'r+') as f:
@@ -230,19 +230,19 @@ class MdArticle(object):
 
         self.title = filename.replace('[博]', '')
         if not self.date:
-            self.modifyed = true
+            self.modifyed = True
             self.date = get_file_datetime(self.full_file_path)
         self.categories = str(list(get_file_categories(self.full_file_path)))
         if len(self.keywords) <= 0:
-            self.modifyed = true
+            self.modifyed = True
             self.keywords = ','.join(get_file_keywords(title=file_path.replace('/', ',') + ',' + self.title))
 
         if len(self.tags) <= 2:  # str形式list,至少含有[]2个字符
-            self.modifyed = true
+            self.modifyed = True
             self.tags = '[' + self.keywords + ']'
 
         if len(self.abbrlink.strip()) == 0:
-            self.modifyed = true
+            self.modifyed = True
             self.abbrlink = str(get_file_abbr(self.title))
         abbr_map[self.abbrlink] = abbr_map.get(self.abbrlink, list()) + [filename]
         return

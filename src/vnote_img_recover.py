@@ -74,9 +74,6 @@ def get_imgs_and_tags(file_path: str):
     tags = list()
     with open(file_path, 'r') as f:
         lines = f.readlines()
-        head = ''.join(lines[:9])
-        tagsStr = re.findall(r"tags: \[(.*?)\]", head, re.I | re.S | re.M)[0]
-        tags = tagsStr.replace('\'', '').replace('\"', '').replace(' ', '').split(',')
 
         content = ''.join(lines[9:])
         find_all_imgs = re.findall(r"([\d_]+\.(png|jpg|jpeg|gif))", content, re.I | re.S | re.M)
