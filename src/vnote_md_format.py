@@ -76,9 +76,10 @@ import sys
 import time
 
 import hashlib
-
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv(), override=True)
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
-
+# os.environ.get('URL')
 
 # 记录addr对应文章，用于输出冲突文章，手工处理
 abbr_map = dict()
@@ -168,6 +169,7 @@ class MdArticle(object):
         self.keywords = ''
         self.abbrlink = ''
         self.data = []
+        self.modifyed = false
         if self.full_file_path.strip():
             # 操作文件
             with open(self.full_file_path, 'r+') as f:
@@ -213,15 +215,19 @@ class MdArticle(object):
 
         self.title = filename.replace('[博]', '')
         if not self.date:
+            self.modifyed = true
             self.date = get_file_datetime(self.full_file_path)
         self.categories = str(list(get_file_categories(self.full_file_path)))
         if len(self.keywords) <= 0:
+            self.modifyed = true
             self.keywords = ','.join(get_file_keywords(title=file_path.replace('/', ',') + ',' + self.title))
 
         if len(self.tags) <= 2:  # str形式list,至少含有[]2个字符
+            self.modifyed = true
             self.tags = '[' + self.keywords + ']'
 
         if len(self.abbrlink.strip()) == 0:
+            self.modifyed = true
             self.abbrlink = str(get_file_abbr(self.title))
         abbr_map[self.abbrlink] = abbr_map.get(self.abbrlink, list()) + [filename]
         return
@@ -263,20 +269,20 @@ class MdArticle(object):
 
 
 # 处理单文件
-def handle_file(full_file_path: str)->None:
+def handle_file(full_file_path: str)->bool:
     """
     处理单个md文件
 
     :param full_file_path: md文件路径
-    :return: None
+    :return: bool: 文件是否被更新
     """
     if not full_file_path.endswith('.md'):
         return
-    print(full_file_path)
 
     md_article = MdArticle(full_file_path)
     md_article.fill_info()
     md_article.save()
+    return md_article.modifyed
 
 
 # 处理目录
@@ -301,10 +307,15 @@ if __name__ == '__main__':
     file_or_dir_list = args.file_or_dir_list
 
     print('params: %s' % file_or_dir_list)
+    modifyed_files=list()
     for param in file_or_dir_list:
         if os.path.isdir(param):
             handle_dir(param)
         elif os.path.isfile(param):
-            handle_file(param)
+            handle_file(param) and modifyed_files.append(param)
+
+    print('modifyed_files')
+    pprint(modifyed_files, width=160)
     abbr_conflict_map = {k: v for k, v in abbr_map.items() if len(v) > 1}
-    print('abbr_conflict_map: %s' % str(abbr_conflict_map))
+    print('abbr_conflict_map')
+    pprint(abbr_conflict_map, width=160)

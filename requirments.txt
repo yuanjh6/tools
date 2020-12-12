@@ -1,3 +1,5 @@
 # conda create -n tools python=3.5
 pandas
 pathlib
+tencentcloud-sdk-python
+python-dotenv
