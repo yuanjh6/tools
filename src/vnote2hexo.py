@@ -14,6 +14,15 @@
 使用示例: python vnote2hexo.py -v /home/john/文档/vnote_notebooks/vnote -s /home/john/opt/hexo/source -f '\[博\].*\.md' -w '/home/john/opt/hexo/source/images_out/water.png'
 
 参考本博客博文：脚本_vnote同步到hexo步骤[博]（自行搜索）
+
+特殊注意
+
+mmfpge 添加水印命令:
+
+"ffmpeg -i %s -i %s -filter_complex 'overlay=main_w-overlay_w-10 : main_h-overlay_h-10' %s -y" % (file_path, water_path, file_path)
+
+存在bug：图片file_path为jpg格式ok，图片file_path为png格式,提示源文件和目标文件不能相同
+
 """
 import argparse
 import os
@@ -100,17 +109,14 @@ if __name__ == '__main__':
                 # 文章copy到文章文件夹
                 shutil.copy(dirpath + '/' + name, hexo_md_dir)
                 # 图片copy到图片文件夹
-                img_names = list(set(img_names) - set(hexo_exist_imgs))
+                img_names = list(set(img_names) )
                 if img_names:
-                    try:
-                        vnote_img_dir = dirpath + '/_v_images'
-                        # 图片复制
-                        list(map(lambda img_name: shutil.copy(vnote_img_dir + '/' + img_name, hexo_img_dir), img_names))
-                        # 图片加水印
-                        list(map(lambda img_name: water_mark(hexo_img_dir + '/' + img_name, water_path), img_names))
-                        new_imgs.extend(img_names)
-                    except Exception as e:
-                        lost_imgs.append(e.filename)
+                    vnote_img_dir = dirpath + '/_v_images'
+                    # 图片复制
+                    [shutil.copy(vnote_img_dir + '/' + img_name, hexo_img_dir) for img_name in img_names if os.path.exists(vnote_img_dir + '/' + img_name)]
+                    # 图片加水印
+                    [water_mark(hexo_img_dir + '/' + img_name, water_path) for img_name in img_names if os.path.exists(hexo_img_dir + '/' + img_name)]
+                    new_imgs.extend(img_names)
                 # 文章内部修改图片引用路径
                 hexo_md_path = hexo_md_dir + '/' + name
                 hexo_md_paths.append(hexo_md_path)
