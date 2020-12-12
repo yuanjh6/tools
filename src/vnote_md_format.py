@@ -139,22 +139,6 @@ def get_file_keywords(title: str):
     :param title: 文章标题
     :return: 文章关键词
     """
-    from tencentcloud.common import credential
-    from tencentcloud.common.profile.client_profile import ClientProfile
-    from tencentcloud.common.profile.http_profile import HttpProfile
-    from tencentcloud.nlp.v20190408 import nlp_client, models
-
-    # todo should't here,but outer can't use sphinx autodoc
-    # 访问凭证去腾讯找，参考：https://console.cloud.tencent.com/nlp/basicguide
-    cred = credential.Credential("xxx", "yyy")
-    http_profile = HttpProfile()
-    http_profile.endpoint = "nlp.tencentcloudapi.com"
-
-    client_profile = ClientProfile()
-    client_profile.httpProfile = http_profile
-    client = nlp_client.NlpClient(cred, "ap-guangzhou", client_profile)
-    req = models.KeywordsExtractionRequest()
-
     title = re.sub(r'\[.*?\]', r'', title).replace('_', ',')  # 去除[]中的东西
     title = re.sub(r'\d+', r'', title)
     params = '{"Num":10,"Text":"%s"}' % title
