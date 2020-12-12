@@ -58,7 +58,7 @@ def get_imgs_and_tags(file_path: str):
 
 
 # 添加水印
-def water_mark(file_path: str, water_path: Optional[str] = None)->None:
+def water_mark(source_path: str, to_path: str, water_path: Optional[str] = None) -> None:
     """
     为图片加水印(借助ffmpeg)
 
@@ -69,7 +69,7 @@ def water_mark(file_path: str, water_path: Optional[str] = None)->None:
     if not water_path:
         return
     ffmpeg_cmd = "ffmpeg -i %s -i %s -filter_complex 'overlay=main_w-overlay_w-10 : main_h-overlay_h-10' %s -y" % (
-        file_path, water_path, file_path)
+        source_path, water_path, to_path)
     subprocess.call(ffmpeg_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 
@@ -112,10 +112,9 @@ if __name__ == '__main__':
                 img_names = list(set(img_names) )
                 if img_names:
                     vnote_img_dir = dirpath + '/_v_images'
-                    # 图片复制
-                    [shutil.copy(vnote_img_dir + '/' + img_name, hexo_img_dir) for img_name in img_names if os.path.exists(vnote_img_dir + '/' + img_name)]
-                    # 图片加水印
-                    [water_mark(hexo_img_dir + '/' + img_name, water_path) for img_name in img_names if os.path.exists(hexo_img_dir + '/' + img_name)]
+                    # 图片复制加水印
+                    [water_mark(source_path=vnote_img_dir + '/' + img_name, to_path=hexo_img_dir + '/' + img_name, water_path=water_path)
+                     for img_name in img_names if os.path.exists(vnote_img_dir + '/' + img_name)]
                     new_imgs.extend(img_names)
                 # 文章内部修改图片引用路径
                 hexo_md_path = hexo_md_dir + '/' + name
