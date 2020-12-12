@@ -109,7 +109,7 @@ if __name__ == '__main__':
                 # 文章copy到文章文件夹
                 shutil.copy(dirpath + '/' + name, hexo_md_dir)
                 # 图片copy到图片文件夹
-                img_names = list(set(img_names) )
+                img_names = list(set(img_names) - set(hexo_exist_imgs))
                 if img_names:
                     vnote_img_dir = dirpath + '/_v_images'
                     # 图片复制加水印
