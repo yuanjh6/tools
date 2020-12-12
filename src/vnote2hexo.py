@@ -142,8 +142,8 @@ if __name__ == '__main__':
         tagDf.loc[tagDf.shape[0]] = [keys[0], keys[1] if keys[1:] else '', ','.join(
             ['<a href="/tags/%s" >%s(%s)</a>' % (tag, tag, value) for tag, value in count_map.items()])]
     tagDf = tagDf.sort_values(['path1', 'path2'])
-    print('hexo_md_paths:\n%s \n %d' % ('\n'.join(hexo_md_paths), len(hexo_md_paths)))
-    print('hexo_img_new:\n%s \n %d' % ('\n'.join(new_imgs), len(new_imgs)))
-    print('hexo_img_lost:\n%s \n %d' % ('\n'.join(lost_imgs), len(lost_imgs)))
+    print('hexo_md_paths:\n%s \ntotal md:%d \n' % ('\n'.join(hexo_md_paths), len(hexo_md_paths)))
+    print('hexo_img_new:\n%s \ntotal new imgs:%d \n' % ('\n'.join(new_imgs), len(new_imgs)))
+    print('hexo_img_lost:\n%s \ntotal lost imgs:%d \n' % ('\n'.join(lost_imgs), len(lost_imgs)))
     print('records')
     print(tagDf.to_dict('records'))
