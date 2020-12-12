@@ -75,11 +75,26 @@ import re
 import sys
 import time
 
+from tencentcloud.common import credential
+from tencentcloud.common.profile.client_profile import ClientProfile
+from tencentcloud.common.profile.http_profile import HttpProfile
+from tencentcloud.nlp.v20190408 import nlp_client, models
 import hashlib
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv(), override=True)
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
-# os.environ.get('URL')
+
+TencentSecretId = os.environ.get('TencentSecretId')
+TencentSecretKey = os.environ.get('TencentSecretKey')
+# 访问凭证去腾讯找，参考：https://console.cloud.tencent.com/nlp/basicguide
+cred = credential.Credential(TencentSecretId, TencentSecretKey)
+http_profile = HttpProfile()
+http_profile.endpoint = "nlp.tencentcloudapi.com"
+
+client_profile = ClientProfile()
+client_profile.httpProfile = http_profile
+client = nlp_client.NlpClient(cred, "ap-guangzhou", client_profile)
+req = models.KeywordsExtractionRequest()
 
 # 记录addr对应文章，用于输出冲突文章，手工处理
 abbr_map = dict()
@@ -202,7 +217,7 @@ class MdArticle(object):
         return
 
     # 填充修改自身信息
-    def fill_info(self)->None:
+    def fill_info(self) -> None:
         """
         为原始文章补充hexo字段信息
 
@@ -233,7 +248,7 @@ class MdArticle(object):
         return
 
     # 保存到文件中
-    def save(self)->None:
+    def save(self) -> None:
         """
         保存文章到磁盘
 
@@ -269,7 +284,7 @@ class MdArticle(object):
 
 
 # 处理单文件
-def handle_file(full_file_path: str)->bool:
+def handle_file(full_file_path: str) -> bool:
     """
     处理单个md文件
 
@@ -307,7 +322,7 @@ if __name__ == '__main__':
     file_or_dir_list = args.file_or_dir_list
 
     print('params: %s' % file_or_dir_list)
-    modifyed_files=list()
+    modifyed_files = list()
     for param in file_or_dir_list:
         if os.path.isdir(param):
             handle_dir(param)
