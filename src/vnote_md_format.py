@@ -229,7 +229,7 @@ class MdArticle(object):
             self.modifyed = True
             self.abbrlink = str(get_file_abbr(self.title))
         abbr_map[self.abbrlink] = abbr_map.get(self.abbrlink, list()) + [filename]
-        return
+        return self.modifyed
 
     # 保存到文件中
     def save(self) -> None:
@@ -279,9 +279,9 @@ def handle_file(full_file_path: str) -> bool:
         return
 
     md_article = MdArticle(full_file_path)
-    md_article.fill_info()
+    modifyed = md_article.fill_info()
     md_article.save()
-    return md_article.modifyed
+    return modifyed
 
 
 # 处理目录
@@ -295,7 +295,7 @@ def handle_dir(file_dir: str):
     #     for file in files:
     #         print(os.path.join(root, file))
     all_full_file_path = [os.path.join(root, file) for root, dirs, files in os.walk(file_dir) for file in files]
-    [handle_file(full_file_path) for full_file_path in all_full_file_path]
+    [handle_file(full_file_path) and modifyed_files.append(full_file_path) for full_file_path in all_full_file_path]
 
 
 if __name__ == '__main__':
@@ -314,7 +314,7 @@ if __name__ == '__main__':
             handle_file(param) and modifyed_files.append(param)
 
     print('modifyed_files')
-    pprint(modifyed_files, width=160)
+    pprint(modifyed_files)
     abbr_conflict_map = {k: v for k, v in abbr_map.items() if len(v) > 1}
     print('abbr_conflict_map')
-    pprint(abbr_conflict_map, width=160)
+    pprint(abbr_conflict_map)
