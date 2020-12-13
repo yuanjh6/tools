@@ -10,4 +10,5 @@ src
    valid_rtmp
    vnote2hexo
    vnote2sphinx
+   vnote_img_recover
    vnote_md_format
