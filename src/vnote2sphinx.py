@@ -144,4 +144,4 @@ if __name__ == '__main__':
     [copy_file_imgs(name, path, imgs, sphinx_source_dir) for name, path, imgs in tmp]
     # format file
     file_titles = [format_to_md(name, sphinx_source_dir) for name, _, _ in tmp]
-    print('\n'.join(file_titles))
+    print('\n'.join(sorted(file_titles)))
