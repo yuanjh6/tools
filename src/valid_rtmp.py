@@ -38,14 +38,10 @@ class ValidRtmp():
         'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36',
         'Sec-Fetch-Site': 'same-origin',
         'Sec-Fetch-Mode': 'cors',
-        'Referer': 'https://www.baidu.com/',
         'Accept-Encoding': 'gzip, deflate, br',
-        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8,ja;q=0.7,tr;q=0.6,fr;q=0.5,zh-TW;q=0.4',
-        'Cookie': 'BIDUPSID=8C26E1690527F4CB4ED508565EBE810E; PSTM=1586487982; BAIDUID=8C26E1690527F4CBE9EBFA9A228B6F9B:FG=1; BD_HOME=1; H_PS_PSSID=30971_1422_21088_30839_31186_31217_30823_31163; BD_UPN=123353'
-    }
+        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8,ja;q=0.7,tr;q=0.6,fr;q=0.5,zh-TW;q=0.4'}
 
-    @staticmethod
-    def get_rtmp_url(url: str) -> List[str]:
+    def get_rtmp_url(self,url: str) -> List[str]:
         """
         获取url网页内容中的rtsp,rtmp地址
 
@@ -53,15 +49,14 @@ class ValidRtmp():
         :return list: 种子url中的rtsp,rtmp地址
         """
         with suppress(Exception):
-            response = requests.get(url, headers=headers, timeout=(3, 7))
+            response = requests.get(url, headers=self.headers, timeout=(3, 7))
             content = response.text.replace(" ", "")
             res_url = r"((rtsp|rtmp):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?)"
             urls = re.findall(res_url, content, re.I | re.S | re.M)
             return [x[0] for x in urls]
         return list()
 
-    @staticmethod
-    def valid(url: str) -> str:
+    def valid(self,url: str) -> str:
         """
         是否是合法的rtsp,rtmp地址
 

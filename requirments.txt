@@ -3,3 +3,7 @@ pandas
 pathlib
 tencentcloud-sdk-python
 python-dotenv
+# valid_rtmp.py need
+scikit-build
+opencv-python
+requests
